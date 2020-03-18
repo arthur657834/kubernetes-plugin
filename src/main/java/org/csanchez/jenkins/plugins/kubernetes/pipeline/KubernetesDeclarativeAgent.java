@@ -5,6 +5,7 @@ import org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate;
 import org.csanchez.jenkins.plugins.kubernetes.pod.retention.PodRetention;
 import org.csanchez.jenkins.plugins.kubernetes.pod.yaml.YamlMergeStrategy;
 import org.csanchez.jenkins.plugins.kubernetes.volumes.workspace.WorkspaceVolume;
+import org.csanchez.jenkins.plugins.kubernetes.volumes.HostPathVolume;
 import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.pipeline.modeldefinition.agent.DeclarativeAgent;
 import org.jenkinsci.plugins.pipeline.modeldefinition.agent.DeclarativeAgentDescriptor;
@@ -52,6 +53,7 @@ public class KubernetesDeclarativeAgent extends DeclarativeAgent<KubernetesDecla
     private String yamlFile;
     private YamlMergeStrategy yamlMergeStrategy;
     private WorkspaceVolume workspaceVolume;
+    private HostPathVolume hostPathVolume;
     private String supplementalGroups;
 
     @DataBoundConstructor
@@ -248,6 +250,15 @@ public class KubernetesDeclarativeAgent extends DeclarativeAgent<KubernetesDecla
         this.workspaceVolume = workspaceVolume;
     }
 
+    public HostPathVolume getHostPathVolume() {
+        return hostPathVolume;
+    }
+
+    @DataBoundSetter
+    public void setHostPathVolume(HostPathVolume hostPathVolume) {
+        this.hostPathVolume = hostPathVolume;
+    }
+    
     @DataBoundSetter
     public void setSupplementalGroups(String supplementalGroups) {
         this.supplementalGroups = supplementalGroups;
@@ -284,6 +295,9 @@ public class KubernetesDeclarativeAgent extends DeclarativeAgent<KubernetesDecla
         }
         if (workspaceVolume != null) {
             argMap.put("workspaceVolume", workspaceVolume);
+        }
+        if (hostPathVolume != null) {
+            argMap.put("hostPathVolume", hostPathVolume);
         }
         if (!StringUtils.isEmpty(cloud)) {
             argMap.put("cloud", cloud);
